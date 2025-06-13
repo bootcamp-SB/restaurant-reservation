@@ -9,4 +9,5 @@ import java.util.List;
 public interface ReserveService {
     ResponseEntity<ReserveDto> createReservation(ReserveDto reserveDto);
     ResponseEntity<List<ReserveDto>> getReservations(LocalDate reserveDate);
+    ResponseEntity<ReserveDto> updateReservation(Long customerId, ReserveDto reserveDto);
 }

@@ -27,4 +27,9 @@ public class ReserveController {
     public ResponseEntity<List<ReserveDto>> getReservations(@RequestParam(required = false)LocalDate reserveDate){
        return reserveService.getReservations(reserveDate);
    }
+
+    @PutMapping("/book/{customerId}")
+    public ResponseEntity<ReserveDto> updateReservation(@PathVariable Long customerId, @RequestBody ReserveDto reserveDto) {
+        return reserveService.updateReservation(customerId, reserveDto);
+    }
 }

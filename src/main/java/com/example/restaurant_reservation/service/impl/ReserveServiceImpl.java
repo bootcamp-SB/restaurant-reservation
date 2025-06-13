@@ -55,4 +55,28 @@ public class ReserveServiceImpl implements ReserveService {
         }).collect(Collectors.toList());
         return ResponseEntity.ok(reserveDtos);
     }
+
+    @Override
+    public ResponseEntity<ReserveDto> updateReservation(Long customerId, ReserveDto reserveDto) {
+        if (reserveDto == null){
+            return ResponseEntity.badRequest().build();
+        }
+        ReservationEntity existing = repository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Reservation not found: " + customerId));
+        existing.setCustomerName(reserveDto.getCustomerName());
+        existing.setReserveDate(reserveDto.getReserveDate());
+        existing.setReserveTime(reserveDto.getReserveTime());
+        existing.setTableSize(reserveDto.getTableSize());
+
+        ReservationEntity saved = repository.save(existing);
+
+        ReserveDto responseDto = new ReserveDto();
+        responseDto.setCustomerId(saved.getCustomerId());
+        responseDto.setCustomerName(saved.getCustomerName());
+        responseDto.setReserveDate(saved.getReserveDate());
+        responseDto.setReserveTime(saved.getReserveTime());
+        responseDto.setTableSize(saved.getTableSize());
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

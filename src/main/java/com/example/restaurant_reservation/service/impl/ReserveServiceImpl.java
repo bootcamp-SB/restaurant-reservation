@@ -7,6 +7,10 @@ import com.example.restaurant_reservation.service.ReserveService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ReserveServiceImpl implements ReserveService {
     private final ReserveRepository repository;
@@ -33,5 +37,22 @@ public class ReserveServiceImpl implements ReserveService {
         responseDto.setTableSize(saved.getTableSize());
 
         return ResponseEntity.ok(responseDto);
+    }
+
+    @Override
+    public ResponseEntity<List<ReserveDto>> getReservations(LocalDate reserveDate) {
+        List<ReservationEntity> reservations = (reserveDate != null)
+                ? repository.findByReserveDate(reserveDate)
+                :repository.findAll();
+        List<ReserveDto> reserveDtos = reservations.stream().map(reservationEntity -> {
+            ReserveDto dto = new ReserveDto();
+            dto.setCustomerId(reservationEntity.getCustomerId());
+            dto.setCustomerName(reservationEntity.getCustomerName());
+            dto.setReserveDate(reservationEntity.getReserveDate());
+            dto.setReserveTime(reservationEntity.getReserveTime());
+            dto.setTableSize(reservationEntity.getTableSize());
+            return dto;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(reserveDtos);
     }
 }

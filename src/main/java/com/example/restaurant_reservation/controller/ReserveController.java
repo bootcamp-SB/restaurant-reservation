@@ -6,6 +6,9 @@ import com.example.restaurant_reservation.service.ReserveService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class ReserveController {
@@ -18,5 +21,10 @@ public class ReserveController {
    @PostMapping("/book")
    public ResponseEntity<ReserveDto> createReservation(@RequestBody ReserveDto reserveDto){
        return reserveService.createReservation(reserveDto);
+   }
+
+   @GetMapping("/bookings")
+    public ResponseEntity<List<ReserveDto>> getReservations(@RequestParam(required = false)LocalDate reserveDate){
+       return reserveService.getReservations(reserveDate);
    }
 }

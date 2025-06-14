@@ -79,4 +79,13 @@ public class ReserveServiceImpl implements ReserveService {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @Override
+    public ResponseEntity<Void> deleteReservation(Long customerId) {
+        if (!repository.existsById(customerId)){
+            throw new RuntimeException("Reservation not found for customerId: " + customerId);
+        }
+        repository.deleteById(customerId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -28,8 +28,13 @@ public class ReserveController {
        return reserveService.getReservations(reserveDate);
    }
 
-    @PutMapping("/book/{customerId}")
+    @PutMapping("/update/{customerId}")
     public ResponseEntity<ReserveDto> updateReservation(@PathVariable Long customerId, @RequestBody ReserveDto reserveDto) {
         return reserveService.updateReservation(customerId, reserveDto);
+    }
+
+    @DeleteMapping("/delete/{customerId}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long customerId){
+       return reserveService.deleteReservation(customerId);
     }
 }

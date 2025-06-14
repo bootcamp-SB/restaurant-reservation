@@ -1,21 +1,40 @@
 package com.example.restaurant_reservation.controller;
 
-import org.springframework.http.HttpStatus;
+import com.example.restaurant_reservation.dto.ReserveDto;
+import com.example.restaurant_reservation.entity.ReservationEntity;
+import com.example.restaurant_reservation.service.ReserveService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ReserveController {
-    @GetMapping("/hello")
-    public String helloApi(){
-        return "Hello SpringBoot";
+   private final ReserveService reserveService;
+
+   public ReserveController(ReserveService reserveService){
+       this.reserveService = reserveService;
+   }
+
+   @PostMapping("/book")
+   public ResponseEntity<ReserveDto> createReservation(@RequestBody ReserveDto reserveDto){
+       return reserveService.createReservation(reserveDto);
+   }
+
+   @GetMapping("/bookings")
+    public ResponseEntity<List<ReserveDto>> getReservations(@RequestParam(required = false)LocalDate reserveDate){
+       return reserveService.getReservations(reserveDate);
+   }
+
+    @PutMapping("/update/{customerId}")
+    public ResponseEntity<ReserveDto> updateReservation(@PathVariable Long customerId, @RequestBody ReserveDto reserveDto) {
+        return reserveService.updateReservation(customerId, reserveDto);
     }
 
-    @GetMapping("/send-email/{email}")
-    public ResponseEntity<String> email(@PathVariable String email){
-        String format = String.format("Hello %s", email);
-        return ResponseEntity.ok(format);
+    @DeleteMapping("/delete/{customerId}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long customerId){
+       return reserveService.deleteReservation(customerId);
     }
 }
